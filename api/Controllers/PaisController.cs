@@ -67,7 +67,19 @@ namespace api.Controllers
 
         }
 
-       
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var pais = context.Paises.FirstOrDefault(x => x.Id == id);
+
+            if (pais == null)
+            {
+                return NotFound();
+            }
+            context.Paises.Remove(pais);
+            context.SaveChanges();
+            return Ok(pais);
+        }
 
     }
 }
