@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -25,7 +26,7 @@ namespace api.Controllers
             return context.Paises.ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "paisCreado" )]
         public IActionResult GetById(int id)
         {
             var pais = context.Paises.FirstOrDefault(x => x.Id == id);
@@ -39,5 +40,20 @@ namespace api.Controllers
 
             return Ok(pais);
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Pais pais)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Paises.Add(pais);
+                context.SaveChanges();
+                return new CreatedAtRouteResult("paisCreado", new { id = pais.Id }, pais);
+            }
+            
+            return BadRequest(ModelState);
+        }
+
+      
     }
 }
