@@ -19,10 +19,25 @@ namespace api.Controllers
             this.context = context;
         }
 
-        [HttpGet]
+        [HttpGet] 
         public IEnumerable<Pais>Get()
         {
             return context.Paises.ToList();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var pais = context.Paises.FirstOrDefault(x => x.Id == id);
+
+            if (pais == null)
+            {
+
+                return NotFound();
+
+            }
+
+            return Ok(pais);
         }
     }
 }
